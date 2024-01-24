@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://dr5i7awd1pp1t"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_atltd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rw51t"]
+size = Vector2(40, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5a8ui"]
+size = Vector2(192, 16)
+
+[node name="player" type="CharacterBody2D" groups=["player"]]
+script = ExtResource("1_atltd")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(0.392157, 0.564706, 0.627451, 1)
+offset_right = 40.0
+offset_bottom = 80.0
+color = Color(0, 0, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(20, 40)
+shape = SubResource("RectangleShape2D_rw51t")
+
+[node name="health_bar" type="ProgressBar" parent="."]
+modulate = Color(0, 0.988235, 0, 1)
+offset_left = -48.0
+offset_top = -32.0
+offset_right = 88.0
+offset_bottom = -16.0
+step = 1.0
+value = 60.0
+show_percentage = false
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Area2D"]
+offset_left = 48.0
+offset_top = 24.0
+offset_right = 240.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(144, 32)
+shape = SubResource("RectangleShape2D_5a8ui")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

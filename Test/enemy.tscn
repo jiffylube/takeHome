@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://breb8td36la3w"]
+
+[sub_resource type="GDScript" id="GDScript_dchp4"]
+script/source = "extends CharacterBody2D
+
+const max_health = 1
+var health = max_health
+
+#func _process(delta):
+	#position.x = 700
+	#position.y = 400
+	
+func _ready():
+	game_start()
+	
+func game_start():
+	$health_bar.max_value = max_health
+	$health_bar.value = health
+	print(\"enemy health \" , health)
+	
+# if at anytime during delta health is = 0 , que free
+func _on_area_2d_area_entered(area):
+		print(\"hit\")
+		health -= 1
+		$health_bar.value = health
+		print(\"enemy health \" , health)
+		if health <= 0:
+			queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o1fjj"]
+size = Vector2(40, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qwa7h"]
+size = Vector2(40, 80)
+
+[node name="enemy" type="CharacterBody2D" groups=["enemy"]]
+script = SubResource("GDScript_dchp4")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(40, 80)
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 0, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(20, 40)
+shape = SubResource("RectangleShape2D_o1fjj")
+
+[node name="health_bar" type="ProgressBar" parent="."]
+modulate = Color(0, 1, 0, 1)
+offset_left = -48.0
+offset_top = -32.0
+offset_right = 88.0
+offset_bottom = -16.0
+show_percentage = false
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(20, 40)
+shape = SubResource("RectangleShape2D_qwa7h")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
